@@ -1,55 +1,12 @@
-# import requests
-# from bs4 import BeautifulSoup
-
-# # URLを指定
-# url = 'https://shopping.yahoo.co.jp/category/2496/list?p=&area=13&astk=&first=1&ss_first=1&ts=1699412102&mcr=b80fa60dde8057ac1d85b8b4167e0ffc&tab_ex=commerce&sretry=1&sc_i=shp_pc_search_searchBox_2&sretry=1'
-
-# # URLからページの内容を取得
-# response = requests.get(url)
-
-# # BeautifulSoupオブジェクトを作成し、パーサーを指定
-# soup = BeautifulSoup(response.text, 'html.parser')
-
-# # SearchResultItemStore_SearchResultItemStore__rXVLG クラスを持つ要素の href を取得
-# hrefs = [elem.get('href') for elem in soup.select('.SearchResultItemStore_SearchResultItemStore__rXVLG')]
-
-# # 結果をコンソールに表示
-# for href in hrefs:
-#     print(href)
-
-
-
-
-# from selenium import webdriver
-# from selenium.webdriver.chrome.service import Service  # Serviceをインポート
-# from selenium.webdriver.chrome.options import Options  # Optionsをインポート
-# from selenium.webdriver.common.keys import Keys
-# from bs4 import BeautifulSoup
-# import time
-
-# # WebDriverのパスを指定（Chromeの場合）
-# chromedriver_path = '/path/to/your/chromedriver'  # 実際のパスに置き換えてください
-
-# # ChromeOptionsを設定（必要に応じて）
-# options = Options()
-# # options.add_argument('--headless')  # ヘッドレスモードで実行する場合など
-
-# # WebDriverのServiceオブジェクトを作成
-# service = Service(executable_path=chromedriver_path)
-
-# # WebDriverを起動
-# # driver = webdriver.Chrome(service=service, options=options)
-# driver = webdriver.Chrome
-
-
-
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from bs4 import BeautifulSoup
+import requests
 import time
+
 
 # ChromeOptionsを設定（必要に応じて）
 options = Options()
@@ -69,6 +26,15 @@ driver = webdriver.Chrome(service=service, options=options)
 url = 'https://shopping.yahoo.co.jp/category/2496/list?p=&area=13&astk=&first=1&ss_first=1&ts=1699412102&mcr=b80fa60dde8057ac1d85b8b4167e0ffc&tab_ex=commerce&sretry=1&sc_i=shp_pc_search_searchBox_2&sretry=1'
 driver.get(url)
 
+
+response = requests.get(url)
+soup = BeautifulSoup(response.text, 'html.parser')
+search_results_count = soup.find(class_='SearchResultsDisplayOptions_SearchResultsDisplayOptions__count__WBsPf')
+print(search_results_count.get_text().replace(",", "").replace("件", ""))
+# 件数を取得し、数値型に変換
+# 10回スクロールさせるところをこの変数に変更すれば自動化いけるか
+
+
 # 10回スクロールする
 for _ in range(10):
     # driver.find_element_by_tag_name('body').send_keys(Keys.END)
@@ -80,14 +46,19 @@ for _ in range(10):
 soup = BeautifulSoup(driver.page_source, 'html.parser')
 
 # SearchResultItemStore_SearchResultItemStore__rXVLG クラスを持つ要素の href を取得
-hrefs = [elem.get('href') for elem in soup.select('.SearchResultItemStore_SearchResultItemStore__rXVLG')]
+# hrefs = [elem.get('href') for elem in soup.select('.SearchResultItemStore_SearchResultItemStore__rXVLG')]
+matching_hrefs = [elem.get('href') for elem in soup.select('.SearchResultItemStore_SearchResultItemStore__rXVLG') if elem.get('href').startswith('https://store.shopping.yahoo.co.jp/')]
+non_matching_hrefs = [elem.get('href') for elem in soup.select('.SearchResultItemStore_SearchResultItemStore__rXVLG') if not elem.get('href').startswith('https://store.shopping.yahoo.co.jp/')]
 
-# 結果をコンソールに表示
-# for href in hrefs:
-#     print(href)
+# Write the matching hrefs to list.txt
 with open('list.txt', 'w') as file:
-    for href in hrefs:
+    for href in matching_hrefs:
         file.write(href + "\n")
-        
+
+# Write the non-matching hrefs to list_ex.txt
+with open('list_ex.txt', 'w') as file:
+    for href in non_matching_hrefs:
+        file.write(href + "\n")
+
 # ブラウザを閉じる
 driver.quit()
