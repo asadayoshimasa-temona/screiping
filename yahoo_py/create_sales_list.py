@@ -1,14 +1,12 @@
-
-
 import requests
 from bs4 import BeautifulSoup
 
 # list.txt ファイルからURLを読み込む
-with open('list.txt', 'r', encoding='utf-8') as file:
+with open('shop_info_url_list.txt', 'r', encoding='utf-8') as file:
     urls = file.read().splitlines()
 
 # 出力ファイルを開く
-with open('respons.csv', 'w', encoding='utf-8') as output_file:
+with open('sales_list.csv', 'w', encoding='utf-8') as output_file:
     # 各URLに対してリクエストを送信し、データを取得
     for url in urls:
         response = requests.get(url)

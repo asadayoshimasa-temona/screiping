@@ -51,12 +51,12 @@ matching_hrefs = [elem.get('href') for elem in soup.select('.SearchResultItemSto
 non_matching_hrefs = [elem.get('href') for elem in soup.select('.SearchResultItemStore_SearchResultItemStore__rXVLG') if not elem.get('href').startswith('https://store.shopping.yahoo.co.jp/')]
 
 # Write the matching hrefs to list.txt
-with open('list.txt', 'w') as file:
+with open('shop_info_url_list.txt', 'w') as file:
     for href in matching_hrefs:
         file.write(href + "info.html" + "\n")
 
 # Write the non-matching hrefs to list_ex.txt
-with open('list_ex.txt', 'w') as file:
+with open('exception_shop_info_url_list', 'w') as file:
     for href in non_matching_hrefs:
         file.write(href + "\n")
 
