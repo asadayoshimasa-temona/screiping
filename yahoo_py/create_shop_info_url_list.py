@@ -56,7 +56,7 @@ with open('shop_info_url_list.txt', 'w') as file:
         file.write(href + "info.html" + "\n")
 
 # Write the non-matching hrefs to list_ex.txt
-with open('exception_shop_info_url_list', 'w') as file:
+with open('exception_shop_info_url_list.txt', 'w') as file:
     for href in non_matching_hrefs:
         file.write(href + "\n")
 
