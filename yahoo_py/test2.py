@@ -32,11 +32,11 @@ soup = BeautifulSoup(response.text, 'html.parser')
 search_results_count = soup.find(class_='SearchResultsDisplayOptions_SearchResultsDisplayOptions__count__WBsPf')
 print(search_results_count.get_text().replace(",", "").replace("件", ""))
 # 件数を取得し、数値型に変換
-# 10回スクロールさせるところをこの変数に変更すれば自動化いけるか
+# 10回スクロールさせるところをこの数/30に変更すれば自動化いけるか
 
 
 # 10回スクロールする
-for _ in range(10):
+for _ in range(3):
     # driver.find_element_by_tag_name('body').send_keys(Keys.END)
     driver.find_element(By.TAG_NAME, 'body').send_keys(Keys.END)
 
@@ -53,7 +53,7 @@ non_matching_hrefs = [elem.get('href') for elem in soup.select('.SearchResultIte
 # Write the matching hrefs to list.txt
 with open('list.txt', 'w') as file:
     for href in matching_hrefs:
-        file.write(href + "\n")
+        file.write(href + "info.html" + "\n")
 
 # Write the non-matching hrefs to list_ex.txt
 with open('list_ex.txt', 'w') as file:
