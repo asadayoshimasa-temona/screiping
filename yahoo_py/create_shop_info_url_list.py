@@ -33,7 +33,9 @@ for url in urls:
     response = requests.get(url)
     soup = BeautifulSoup(response.text, 'html.parser')
     search_results_count = soup.find(class_='SearchResultsDisplayOptions_SearchResultsDisplayOptions__count__WBsPf')
+    search_results_category = soup.find(class_='SearchResultHeader_SearchResultHeader__link__Gu9dB')
     print(search_results_count)
+    # print(search_results_category.get_text())
 
     # print(search_results_count.get_text().replace(",", "").replace("件", ""))
     # 件数を取得し、数値型に変換
@@ -43,7 +45,7 @@ for url in urls:
     # ここでは例として3回スクロールすることにします
     for _ in range(3):
         driver.find_element(By.TAG_NAME, 'body').send_keys(Keys.END)
-        time.sleep(1)  # ページがロードされるのを待つ
+        time.sleep(2)  # ページがロードされるのを待つ
 
     # BeautifulSoupを使用してページの内容を解析
     soup = BeautifulSoup(driver.page_source, 'html.parser')
@@ -56,7 +58,7 @@ for url in urls:
     # Write the matching hrefs to list.txt
     with open('shop_info_url_list.txt', 'a') as file:
         for href in unique_urls:
-            file.write(href + "info.html" + "\n")
+            file.write(search_results_category.get_text() + ',' + href + "info.html" + "\n")
 
     # Write the non-matching hrefs to list_ex.txt
     with open('exception_shop_info_url_list.txt', 'a') as file:
