@@ -14,17 +14,11 @@ options.add_argument('--no-sandbox')  # OSのセキュリティモデルをバ�
 options.add_argument('--disable-dev-shm-usage')
 
 # WebDriverのServiceオブジェクトを作成
-# 実際のchromedriverのパスに置き換えてください
 service = Service(executable_path='/usr/bin/chromedriver')
 
 # WebDriverを起動
 driver = webdriver.Chrome(service=service, options=options)
 
-# 複数のURLを処理するためのリスト
-# urls = [
-#     'https://shopping.yahoo.co.jp/category/2496/list?p=&area=13&astk=&first=1&ss_first=1&ts=1699412102&mcr=b80fa60dde8057ac1d85b8b4167e0ffc&tab_ex=commerce&sretry=1&sc_i=shp_pc_search_searchBox_2&sretry=1',
-#     'https://shopping.yahoo.co.jp/category/2494/list/'
-# ]
 with open('shop_category_index_url.txt', 'r') as file:
     urls = [line.strip() for line in file]
 
@@ -34,18 +28,18 @@ for url in urls:
     soup = BeautifulSoup(response.text, 'html.parser')
     search_results_count = soup.find(class_='SearchResultsDisplayOptions_SearchResultsDisplayOptions__count__WBsPf')
     search_results_category = soup.find(class_='SearchResultHeader_SearchResultHeader__link__Gu9dB')
-    print(search_results_count)
+    time.sleep(1)
+    # print(search_results_count)
     # print(search_results_category.get_text())
 
-    # print(search_results_count.get_text().replace(",", "").replace("件", ""))
+    print(search_results_count.get_text().replace(",", "").replace("件", ""))
     # 件数を取得し、数値型に変換
     # 10回スクロールさせるところをこの数/30に変更すれば自動化いけるか
 
     # スクロールする回数を計算（例：全件数 / 1ページあたりの件数）
-    # ここでは例として3回スクロールすることにします
-    for _ in range(3):
+    for _ in range(10):
         driver.find_element(By.TAG_NAME, 'body').send_keys(Keys.END)
-        time.sleep(2)  # ページがロードされるのを待つ
+        time.sleep(1)  # ページがロードされるのを待つ
 
     # BeautifulSoupを使用してページの内容を解析
     soup = BeautifulSoup(driver.page_source, 'html.parser')
@@ -55,12 +49,12 @@ for url in urls:
     non_matching_hrefs = [elem.get('href') for elem in soup.select('.SearchResultItemStore_SearchResultItemStore__rXVLG') if not elem.get('href').startswith('https://store.shopping.yahoo.co.jp/')]
 
     unique_urls = list(set(matching_hrefs))
-    # Write the matching hrefs to list.txt
+    # yahooの店舗詳細ページ持ってたらURLをshop_info_url_list.txtに格納
     with open('shop_info_url_list.txt', 'a') as file:
         for href in unique_urls:
             file.write(search_results_category.get_text() + ',' + href + "info.html" + "\n")
 
-    # Write the non-matching hrefs to list_ex.txt
+    # yahooの店舗詳細ページ持ってなければURLをexception_shop_info_url_list.txtに格納
     with open('exception_shop_info_url_list.txt', 'a') as file:
         for href in non_matching_hrefs:
             file.write(href + "\n")

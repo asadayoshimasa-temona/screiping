@@ -1,4 +1,6 @@
 import requests
+import random
+import time
 from bs4 import BeautifulSoup
 
 # list.txt ファイルからURLを読み込む
@@ -9,6 +11,10 @@ with open('shop_info_url_list.txt', 'r', encoding='utf-8') as file:
 with open('sales_list.txt', 'w', encoding='utf-8') as output_file:
     # 各URLに対してリクエストを送信し、データを取得
     for url in urls:
+        random_number = random.randint(1, 5)
+        time.sleep(random_number)
+        # 人間がやってるふうに見せる
+
         category, shop_url = url.split(',')
 
         response = requests.get(shop_url)
@@ -21,10 +27,16 @@ with open('sales_list.txt', 'w', encoding='utf-8') as output_file:
         lines = [element.get_text(separator=',', strip=True) for element in elements]
         lines.insert(0, shop_url)
         new_lines = [element.replace("\n", "") for element in lines]
-        # lines.pop(7)
-        # print(lines)
+
+        if new_lines[9].startswith('〒'):
+            new_lines.insert(8, "")
+
+        print(new_lines)
+        if "@" in new_lines[13]:
+            new_lines.insert(13, "")
+
         df = ';'.join(new_lines)
-        print(df)
+        # print(df)
         
         # ファイルに書き込む
         output_file.write(category + ';' + df + '\n')
