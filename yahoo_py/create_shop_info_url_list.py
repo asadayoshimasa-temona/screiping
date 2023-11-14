@@ -35,9 +35,12 @@ for url in urls:
     print(search_results_count.get_text().replace(",", "").replace("件", ""))
     # 件数を取得し、数値型に変換
     # 10回スクロールさせるところをこの数/30に変更すれば自動化いけるか
+    print(url)
+    tmp_num = 200 if url in ['https://shopping.yahoo.co.jp/category/2498/list/', 'https://shopping.yahoo.co.jp/category/2499/list/', 'https://shopping.yahoo.co.jp/category/2500/list/', 'https://shopping.yahoo.co.jp/category/2501/list/', 'https://shopping.yahoo.co.jp/category/2509/list/'] else 10
+    print(tmp_num)
 
     # スクロールする回数を計算（例：全件数 / 1ページあたりの件数）
-    for _ in range(10):
+    for _ in range(tmp_num):
         driver.find_element(By.TAG_NAME, 'body').send_keys(Keys.END)
         time.sleep(1)  # ページがロードされるのを待つ
 
