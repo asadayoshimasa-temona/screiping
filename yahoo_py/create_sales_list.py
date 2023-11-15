@@ -2,6 +2,7 @@ import requests
 import random
 import time
 from bs4 import BeautifulSoup
+# from datetime import datetime
 
 # list.txt ファイルからURLを読み込む
 with open('shop_info_url_list.txt', 'r', encoding='utf-8') as file:
@@ -16,20 +17,20 @@ with open('sales_list.txt', 'w', encoding='utf-8') as output_file:
         # 人間がやってるふうに見せる
 
         category, shop_url = url.split(',')
-
+        print(shop_url)
         response = requests.get(shop_url)
+        print(response)
         soup = BeautifulSoup(response.text, 'html.parser')
 
         # elRowContent クラスを持つすべての要素を取得
         elements = soup.find_all(class_='elRowContent')
-
+        
         # 各要素のテキストコンテンツを取得し、リストに格納
         lines = [element.get_text(separator=',', strip=True) for element in elements]
         lines.insert(0, shop_url)
         new_lines = [element.replace("\n", "") for element in lines]
         if len(new_lines) > 9:
         # infoページがない場合の処理もっといい書き方あると思う
-
             if new_lines[9].startswith('〒'):
                 new_lines.insert(8, "")
 

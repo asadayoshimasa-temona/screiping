@@ -1,15 +1,11 @@
-from requests import Session
-url = "https://ck.storematch.jp/rd?v=4.2&c=p&campaign_id=9y9&cat=cHr&code=mobile-p_wa-30days&date=elugCP&debug=0&ecsite_id=1&frequency_control_group=-&ope=3&page=6&pos=5&qid=17w&rid=ZVMkCwAGpc-3T_uTCoMglgqDAWRsrQ&rqcat=cpN&search_keyword=&sig=vepqYMSUNfWX/jnPE0M8Y+5FzS9kYJYYf09z7pCnCbU=&site_browser_id=dc345a1bdcd00155b9b859fd7c7c2570a0aad673856dce251ce29f9d25400c2c&site_user_id=&uid=9y9&url_type=2"
-# セッションを作成
-session = Session()
+import requests
+from bs4 import BeautifulSoup
 
-# リダイレクトの上限を設定
-session.max_redirects = 50
+url = 'https://ck.storematch.jp/rd?v=4.2&c=1K&campaign_id=4ZE&cat=6cV&code=iloveheaven_3038&date=eluhke&debug=0&ecsite_id=1&frequency_control_group=-&ope=1&page=3&pos=8&qid=17w&rid=ZVMtvgABGHW3T_uOCoMhMwqDALkClQ&rqcat=Ee&search_keyword=&sig=sVg77xIVtIa49Jf24XwFFGt69x/aTamkcb5lSgXvQ64=&site_browser_id=4eafa5a370d0b9ff8d0cd5e803242ddc29eae5959073c2878e98c2cb424c2cda&site_user_id=&uid=4ZE&url_type=2'  # 初期URL
+response = requests.get(url)
+# soup = BeautifulSoup(response.content, 'html.parser')
 
-# リクエストを送信し、リダイレクトを許可
-response = session.get(url, allow_redirects=True)
-print(response)
-final_url = response.url
+# 現在のURLを取得
+print(response.url)
 
-print(final_url)
-# アクセスするURL
+
