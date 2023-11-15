@@ -6,6 +6,7 @@ from selenium.webdriver.common.by import By
 from bs4 import BeautifulSoup
 import requests
 import time
+import requests
 
 # ChromeOptionsを設定（必要に応じて）
 options = Options()

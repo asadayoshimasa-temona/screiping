@@ -27,16 +27,18 @@ with open('sales_list.txt', 'w', encoding='utf-8') as output_file:
         lines = [element.get_text(separator=',', strip=True) for element in elements]
         lines.insert(0, shop_url)
         new_lines = [element.replace("\n", "") for element in lines]
+        if len(new_lines) > 9:
+        # infoページがない場合の処理もっといい書き方あると思う
 
-        if new_lines[9].startswith('〒'):
-            new_lines.insert(8, "")
+            if new_lines[9].startswith('〒'):
+                new_lines.insert(8, "")
 
-        print(new_lines)
-        if "@" in new_lines[13]:
-            new_lines.insert(13, "")
+            print(new_lines)
+            if "@" in new_lines[13]:
+                new_lines.insert(13, "")
 
-        df = ';'.join(new_lines)
-        # print(df)
-        
-        # ファイルに書き込む
-        output_file.write(category + ';' + df + '\n')
+            df = ';'.join(new_lines)
+            # print(df)
+            
+            # ファイルに書き込む
+            output_file.write(category + ';' + df + '\n')
