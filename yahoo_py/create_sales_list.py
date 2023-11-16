@@ -39,7 +39,6 @@ with open('sales_list.txt', 'w', encoding='utf-8') as output_file:
                 new_lines.insert(13, "")
 
             df = ';'.join(new_lines)
-            # print(df)
             
             # ファイルに書き込む
             output_file.write(category + ';' + df + '\n')
